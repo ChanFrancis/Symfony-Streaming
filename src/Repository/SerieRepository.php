@@ -4,39 +4,39 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\WatchHistory;
+use App\Entity\Serie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<WatchHistory>
+ * @extends ServiceEntityRepository<Serie>
  */
-class WatchHistoryRepository extends ServiceEntityRepository
+class SerieRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, WatchHistory::class);
+        parent::__construct($registry, Serie::class);
     }
 
     //    /**
-    //     * @return WatchHistory[] Returns an array of WatchHistory objects
+    //     * @return Serie[] Returns an array of Serie objects
     //     */
     //    public function findByExampleField($value): array
     //    {
-    //        return $this->createQueryBuilder('w')
-    //            ->andWhere('w.exampleField = :val')
+    //        return $this->createQueryBuilder('s')
+    //            ->andWhere('s.exampleField = :val')
     //            ->setParameter('val', $value)
-    //            ->orderBy('w.id', 'ASC')
+    //            ->orderBy('s.id', 'ASC')
     //            ->setMaxResults(10)
     //            ->getQuery()
     //            ->getResult()
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?WatchHistory
+    //    public function findOneBySomeField($value): ?Serie
     //    {
-    //        return $this->createQueryBuilder('w')
-    //            ->andWhere('w.exampleField = :val')
+    //        return $this->createQueryBuilder('s')
+    //            ->andWhere('s.exampleField = :val')
     //            ->setParameter('val', $value)
     //            ->getQuery()
     //            ->getOneOrNullResult()

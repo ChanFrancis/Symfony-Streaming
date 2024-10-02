@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\LanguageRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LanguageRepository::class)]
@@ -18,6 +22,17 @@ class Language
 
     #[ORM\Column(length: 3)]
     private ?string $code = null;
+
+    /**
+     * @var Collection<int, Media>
+     */
+    #[ORM\ManyToMany(targetEntity: Media::class, mappedBy: 'mediaLanguage')]
+    private Collection $MediaLanguage;
+
+    public function __construct()
+    {
+        $this->MediaLanguage = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -44,6 +59,33 @@ class Language
     public function setCode(string $code): static
     {
         $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Media>
+     */
+    public function getMediaLanguage(): Collection
+    {
+        return $this->MediaLanguage;
+    }
+
+    public function addMediaLanguage(Media $mediaLanguage): static
+    {
+        if (!$this->MediaLanguage->contains($mediaLanguage)) {
+            $this->MediaLanguage->add($mediaLanguage);
+            $mediaLanguage->addMediaLanguage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMediaLanguage(Media $mediaLanguage): static
+    {
+        if ($this->MediaLanguage->removeElement($mediaLanguage)) {
+            $mediaLanguage->removeMediaLanguage($this);
+        }
 
         return $this;
     }

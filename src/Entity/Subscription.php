@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\SubscriptionRepository;
@@ -30,9 +32,16 @@ class Subscription
     #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'currentSubscription')]
     private Collection $users;
 
+    /**
+     * @var Collection<int, SubscriptionHistory>
+     */
+    #[ORM\OneToMany(targetEntity: SubscriptionHistory::class, mappedBy: 'subscription')]
+    private Collection $subscriptionHistory;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->subscriptionHistory = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -100,6 +109,36 @@ class Subscription
             // set the owning side to null (unless already changed)
             if ($user->getCurrentSubscription() === $this) {
                 $user->setCurrentSubscription(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SubscriptionHistory>
+     */
+    public function getSubscriptionHistory(): Collection
+    {
+        return $this->subscriptionHistory;
+    }
+
+    public function addSubscriptionHistory(SubscriptionHistory $subscriptionHistory): static
+    {
+        if (!$this->subscriptionHistory->contains($subscriptionHistory)) {
+            $this->subscriptionHistory->add($subscriptionHistory);
+            $subscriptionHistory->setSubscription($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubscriptionHistory(SubscriptionHistory $subscriptionHistory): static
+    {
+        if ($this->subscriptionHistory->removeElement($subscriptionHistory)) {
+            // set the owning side to null (unless already changed)
+            if ($subscriptionHistory->getSubscription() === $this) {
+                $subscriptionHistory->setSubscription(null);
             }
         }
 

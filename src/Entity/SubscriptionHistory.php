@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\SubscriptionHistoryRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SubscriptionHistoryRepository::class)]
@@ -18,6 +22,14 @@ class SubscriptionHistory
 
     #[ORM\Column]
     private ?\DateTimeImmutable $endAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'subscriptionHistories')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $subscriber = null;
+
+    #[ORM\ManyToOne(inversedBy: 'subscriptionHistory')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Subscription $subscription = null;
 
     public function getId(): ?int
     {
@@ -44,6 +56,32 @@ class SubscriptionHistory
     public function setEndAt(\DateTimeImmutable $endAt): static
     {
         $this->endAt = $endAt;
+
+        return $this;
+    }
+
+    public function getSubscriber(): ?User
+    {
+        return $this->subscriber;
+    }
+
+    public function setSubscriber(?User $subscriber): static
+    {
+        $this->subscriber = $subscriber;
+
+        return $this;
+    }
+
+
+
+    public function getSubscription(): ?Subscription
+    {
+        return $this->subscription;
+    }
+
+    public function setSubscription(?Subscription $subscription): static
+    {
+        $this->subscription = $subscription;
 
         return $this;
     }

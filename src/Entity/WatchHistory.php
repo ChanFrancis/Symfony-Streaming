@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\WatchHistoryRepository;
@@ -18,6 +20,12 @@ class WatchHistory
 
     #[ORM\Column]
     private ?int $numberOfViews = null;
+
+    #[ORM\ManyToOne(inversedBy: 'watchHistory')]
+    private ?User $user = null;
+
+    #[ORM\ManyToOne(inversedBy: 'watchHistory')]
+    private ?Media $media = null;
 
     public function getId(): ?int
     {
@@ -44,6 +52,30 @@ class WatchHistory
     public function setNumberOfViews(int $numberOfViews): static
     {
         $this->numberOfViews = $numberOfViews;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getMedia(): ?Media
+    {
+        return $this->media;
+    }
+
+    public function setMedia(?Media $media): static
+    {
+        $this->media = $media;
 
         return $this;
     }

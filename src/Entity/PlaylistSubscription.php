@@ -1,12 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Entity;
 
 use App\Repository\PlaylistSubscriptionRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PlaylistSubscriptionRepository::class)]
@@ -20,19 +16,13 @@ class PlaylistSubscription
     #[ORM\Column]
     private ?\DateTimeImmutable $subscribedAt = null;
 
-    /**
-     * @var Collection<int, User>
-     */
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'playlistSubscription')]
-    private Collection $user;
+    #[ORM\ManyToOne(inversedBy: 'playlistSubscriptions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $subscriber = null;
 
-    #[ORM\ManyToOne(inversedBy: 'playlistSubscription')]
+    #[ORM\ManyToOne(inversedBy: 'playlistSubscriptions')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Playlist $playlist = null;
-
-    public function __construct()
-    {
-        $this->user = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -51,26 +41,14 @@ class PlaylistSubscription
         return $this;
     }
 
-    /**
-     * @return Collection<int, User>
-     */
-    public function getUser(): Collection
+    public function getSubscriber(): ?User
     {
-        return $this->user;
+        return $this->subscriber;
     }
 
-    public function addUser(User $user): static
+    public function setSubscriber(?User $subscriber): static
     {
-        if (!$this->user->contains($user)) {
-            $this->user->add($user);
-        }
-
-        return $this;
-    }
-
-    public function removeUser(User $user): static
-    {
-        $this->user->removeElement($user);
+        $this->subscriber = $subscriber;
 
         return $this;
     }

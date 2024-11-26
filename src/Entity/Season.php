@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Entity;
 
 use App\Repository\SeasonRepository;
@@ -21,17 +19,18 @@ class Season
     private ?string $number = null;
 
     /**
-     * @var Collection<int, Serie>
+     * @var Collection<int, Episode>
      */
-    #[ORM\OneToMany(targetEntity: Serie::class, mappedBy: 'season')]
-    private Collection $serie;
+    #[ORM\OneToMany(targetEntity: Episode::class, mappedBy: 'season')]
+    private Collection $episodes;
 
-    #[ORM\ManyToOne(inversedBy: 'season')]
-    private ?Episode $episode = null;
+    #[ORM\ManyToOne(inversedBy: 'seasons')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Serie $serie = null;
 
     public function __construct()
     {
-        $this->serie = new ArrayCollection();
+        $this->episodes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -52,43 +51,43 @@ class Season
     }
 
     /**
-     * @return Collection<int, Serie>
+     * @return Collection<int, Episode>
      */
-    public function getSerie(): Collection
+    public function getEpisodes(): Collection
     {
-        return $this->serie;
+        return $this->episodes;
     }
 
-    public function addSerie(Serie $serie): static
+    public function addEpisode(Episode $episode): static
     {
-        if (!$this->serie->contains($serie)) {
-            $this->serie->add($serie);
-            $serie->setSeason($this);
+        if (!$this->episodes->contains($episode)) {
+            $this->episodes->add($episode);
+            $episode->setSeason($this);
         }
 
         return $this;
     }
 
-    public function removeSerie(Serie $serie): static
+    public function removeEpisode(Episode $episode): static
     {
-        if ($this->serie->removeElement($serie)) {
+        if ($this->episodes->removeElement($episode)) {
             // set the owning side to null (unless already changed)
-            if ($serie->getSeason() === $this) {
-                $serie->setSeason(null);
+            if ($episode->getSeason() === $this) {
+                $episode->setSeason(null);
             }
         }
 
         return $this;
     }
 
-    public function getEpisode(): ?Episode
+    public function getSerie(): ?Serie
     {
-        return $this->episode;
+        return $this->serie;
     }
 
-    public function setEpisode(?Episode $episode): static
+    public function setSerie(?Serie $serie): static
     {
-        $this->episode = $episode;
+        $this->serie = $serie;
 
         return $this;
     }

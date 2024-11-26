@@ -13,30 +13,30 @@ class AuthController extends AbstractController
     #[Route(path: '/login', name: 'page_login')]
     public function login(): Response
     {
-        return $this->render('auth/login.html.twig');
+          return $this->render(view: 'auth/login.html.twig');
     }
 
     #[Route(path: '/register', name: 'page_register')]
     public function register(): Response
     {
-        return $this->render('auth/register.html.twig');
+        return $this->render(view: 'auth/register.html.twig');
     }
 
-    #[Route(path: '/forgot', name: 'page_forgot_password')]
-    public function forgotPassword(): Response
+    #[Route(path: '/forgot', name: 'page_forgot')]
+    public function forgot(): Response
     {
-        return $this->render('auth/forgot.html.twig');
+        return $this->render(view: 'auth/forgot.html.twig');
     }
 
-    #[Route(path: '/reset', name: 'page_reset_password')]
-    public function resetPassword(): Response
+    #[Route(path: '/reset', name: 'page_reset')]
+    public function reset(): Response
     {
-        return $this->render('auth/reset.html.twig');
+        return $this->render(view: 'auth/reset.html.twig');
     }
 
-    #[Route(path: '/confirm', name: 'page_confirm_account')]
-    public function confirmAccount(): Response
+    #[Route(path: '/confirm', name: 'page_confirm')]
+    public function confirm(): Response
     {
-        return $this->render('auth/confirm.html.twig');
+        return $this->render(view: 'auth/confirm.html.twig');
     }
 }

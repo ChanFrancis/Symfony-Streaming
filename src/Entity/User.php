@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Entity;
 
 use App\Enum\UserAccountStatusEnum;
@@ -29,7 +27,7 @@ class User
     private ?string $password = null;
 
     #[ORM\Column(enumType: UserAccountStatusEnum::class)]
-    private ?UserAccountStatusEnum $accountStatus = UserAccountStatusEnum::PENDING;
+    private ?UserAccountStatusEnum $accountStatus = UserAccountStatusEnum::INACTIVE;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
     private ?Subscription $currentSubscription = null;
@@ -40,7 +38,7 @@ class User
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'publisher')]
     private Collection $comments;
 
-   /**
+    /**
      * @var Collection<int, SubscriptionHistory>
      */
     #[ORM\OneToMany(targetEntity: SubscriptionHistory::class, mappedBy: 'subscriber')]
@@ -49,21 +47,28 @@ class User
     /**
      * @var Collection<int, PlaylistSubscription>
      */
-    #[ORM\OneToMany(targetEntity: PlaylistSubscription::class, mappedBy: 'user')]
-    private Collection $playlistSubscription;
+    #[ORM\OneToMany(targetEntity: PlaylistSubscription::class, mappedBy: 'subscriber')]
+    private Collection $playlistSubscriptions;
+
+    /**
+     * @var Collection<int, Playlist>
+     */
+    #[ORM\OneToMany(targetEntity: Playlist::class, mappedBy: 'creator')]
+    private Collection $playlists;
 
     /**
      * @var Collection<int, WatchHistory>
      */
-    #[ORM\OneToMany(targetEntity: WatchHistory::class, mappedBy: 'user')]
-    private Collection $watchHistory;
+    #[ORM\OneToMany(targetEntity: WatchHistory::class, mappedBy: 'watcher')]
+    private Collection $watchHistories;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->subscriptionHistories = new ArrayCollection();
-        $this->playlistSubscription = new ArrayCollection();
-        $this->watchHistory = new ArrayCollection();
+        $this->playlistSubscriptions = new ArrayCollection();
+        $this->playlists = new ArrayCollection();
+        $this->watchHistories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -182,26 +187,28 @@ class User
     public function removeSubscriptionHistory(SubscriptionHistory $subscriptionHistory): static
     {
         if ($this->subscriptionHistories->removeElement($subscriptionHistory)) {
+            // set the owning side to null (unless already changed)
             if ($subscriptionHistory->getSubscriber() === $this) {
                 $subscriptionHistory->setSubscriber(null);
             }
         }
+
         return $this;
     }
 
     /**
      * @return Collection<int, PlaylistSubscription>
      */
-    public function getPlaylistSubscription(): Collection
+    public function getPlaylistSubscriptions(): Collection
     {
-        return $this->playlistSubscription;
+        return $this->playlistSubscriptions;
     }
 
     public function addPlaylistSubscription(PlaylistSubscription $playlistSubscription): static
     {
-        if (!$this->playlistSubscription->contains($playlistSubscription)) {
-            $this->playlistSubscription->add($playlistSubscription);
-            $playlistSubscription->addUser($this);
+        if (!$this->playlistSubscriptions->contains($playlistSubscription)) {
+            $this->playlistSubscriptions->add($playlistSubscription);
+            $playlistSubscription->setSubscriber($this);
         }
 
         return $this;
@@ -209,8 +216,41 @@ class User
 
     public function removePlaylistSubscription(PlaylistSubscription $playlistSubscription): static
     {
-        if ($this->playlistSubscription->removeElement($playlistSubscription)) {
-            $playlistSubscription->removeUser($this);
+        if ($this->playlistSubscriptions->removeElement($playlistSubscription)) {
+            // set the owning side to null (unless already changed)
+            if ($playlistSubscription->getSubscriber() === $this) {
+                $playlistSubscription->setSubscriber(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Playlist>
+     */
+    public function getPlaylists(): Collection
+    {
+        return $this->playlists;
+    }
+
+    public function addPlaylist(Playlist $playlist): static
+    {
+        if (!$this->playlists->contains($playlist)) {
+            $this->playlists->add($playlist);
+            $playlist->setCreator($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlaylist(Playlist $playlist): static
+    {
+        if ($this->playlists->removeElement($playlist)) {
+            // set the owning side to null (unless already changed)
+            if ($playlist->getCreator() === $this) {
+                $playlist->setCreator(null);
+            }
         }
 
         return $this;
@@ -219,16 +259,16 @@ class User
     /**
      * @return Collection<int, WatchHistory>
      */
-    public function getWatchHistory(): Collection
+    public function getWatchHistories(): Collection
     {
-        return $this->watchHistory;
+        return $this->watchHistories;
     }
 
     public function addWatchHistory(WatchHistory $watchHistory): static
     {
-        if (!$this->watchHistory->contains($watchHistory)) {
-            $this->watchHistory->add($watchHistory);
-            $watchHistory->setUser($this);
+        if (!$this->watchHistories->contains($watchHistory)) {
+            $this->watchHistories->add($watchHistory);
+            $watchHistory->setWatcher($this);
         }
 
         return $this;
@@ -236,10 +276,10 @@ class User
 
     public function removeWatchHistory(WatchHistory $watchHistory): static
     {
-        if ($this->watchHistory->removeElement($watchHistory)) {
+        if ($this->watchHistories->removeElement($watchHistory)) {
             // set the owning side to null (unless already changed)
-            if ($watchHistory->getUser() === $this) {
-                $watchHistory->setUser(null);
+            if ($watchHistory->getWatcher() === $this) {
+                $watchHistory->setWatcher(null);
             }
         }
 

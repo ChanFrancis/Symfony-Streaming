@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Entity;
 
 use App\Repository\LanguageRepository;
@@ -26,12 +24,12 @@ class Language
     /**
      * @var Collection<int, Media>
      */
-    #[ORM\ManyToMany(targetEntity: Media::class, mappedBy: 'mediaLanguage')]
-    private Collection $MediaLanguage;
+    #[ORM\ManyToMany(targetEntity: Media::class, mappedBy: 'languages')]
+    private Collection $medias;
 
     public function __construct()
     {
-        $this->MediaLanguage = new ArrayCollection();
+        $this->medias = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -66,25 +64,25 @@ class Language
     /**
      * @return Collection<int, Media>
      */
-    public function getMediaLanguage(): Collection
+    public function getMedias(): Collection
     {
-        return $this->MediaLanguage;
+        return $this->medias;
     }
 
-    public function addMediaLanguage(Media $mediaLanguage): static
+    public function addMedia(Media $media): static
     {
-        if (!$this->MediaLanguage->contains($mediaLanguage)) {
-            $this->MediaLanguage->add($mediaLanguage);
-            $mediaLanguage->addMediaLanguage($this);
+        if (!$this->medias->contains($media)) {
+            $this->medias->add($media);
+            $media->addLanguage($this);
         }
 
         return $this;
     }
 
-    public function removeMediaLanguage(Media $mediaLanguage): static
+    public function removeMedia(Media $media): static
     {
-        if ($this->MediaLanguage->removeElement($mediaLanguage)) {
-            $mediaLanguage->removeMediaLanguage($this);
+        if ($this->medias->removeElement($media)) {
+            $media->removeLanguage($this);
         }
 
         return $this;

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Entity;
 
 use App\Repository\PlaylistRepository;
@@ -30,7 +28,11 @@ class Playlist
      * @var Collection<int, PlaylistSubscription>
      */
     #[ORM\OneToMany(targetEntity: PlaylistSubscription::class, mappedBy: 'playlist')]
-    private Collection $playlistSubscription;
+    private Collection $playlistSubscriptions;
+
+    #[ORM\ManyToOne(inversedBy: 'playlists')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $creator = null;
 
     /**
      * @var Collection<int, PlaylistMedia>
@@ -40,7 +42,7 @@ class Playlist
 
     public function __construct()
     {
-        $this->playlistSubscription = new ArrayCollection();
+        $this->playlistSubscriptions = new ArrayCollection();
         $this->playlistMedia = new ArrayCollection();
     }
 
@@ -88,15 +90,15 @@ class Playlist
     /**
      * @return Collection<int, PlaylistSubscription>
      */
-    public function getPlaylistSubscription(): Collection
+    public function getPlaylistSubscriptions(): Collection
     {
-        return $this->playlistSubscription;
+        return $this->playlistSubscriptions;
     }
 
     public function addPlaylistSubscription(PlaylistSubscription $playlistSubscription): static
     {
-        if (!$this->playlistSubscription->contains($playlistSubscription)) {
-            $this->playlistSubscription->add($playlistSubscription);
+        if (!$this->playlistSubscriptions->contains($playlistSubscription)) {
+            $this->playlistSubscriptions->add($playlistSubscription);
             $playlistSubscription->setPlaylist($this);
         }
 
@@ -105,12 +107,24 @@ class Playlist
 
     public function removePlaylistSubscription(PlaylistSubscription $playlistSubscription): static
     {
-        if ($this->playlistSubscription->removeElement($playlistSubscription)) {
+        if ($this->playlistSubscriptions->removeElement($playlistSubscription)) {
             // set the owning side to null (unless already changed)
             if ($playlistSubscription->getPlaylist() === $this) {
                 $playlistSubscription->setPlaylist(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreator(): ?User
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(?User $creator): static
+    {
+        $this->creator = $creator;
 
         return $this;
     }

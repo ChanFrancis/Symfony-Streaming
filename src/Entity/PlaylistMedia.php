@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Entity;
 
 use App\Repository\PlaylistMediaRepository;
@@ -19,9 +17,11 @@ class PlaylistMedia
     private ?\DateTimeImmutable $addedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'playlistMedia')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Playlist $playlist = null;
 
     #[ORM\ManyToOne(inversedBy: 'playlistMedia')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Media $media = null;
 
     public function getId(): ?int

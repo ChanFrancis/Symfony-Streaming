@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Entity;
 
 use App\Repository\CategoryRepository;
@@ -26,12 +24,12 @@ class Category
     /**
      * @var Collection<int, Media>
      */
-    #[ORM\ManyToMany(targetEntity: Media::class, mappedBy: 'categoriesMedia')]
-    private Collection $categoriesMedia;
+    #[ORM\ManyToMany(targetEntity: Media::class, mappedBy: 'categories')]
+    private Collection $medias;
 
     public function __construct()
     {
-        $this->categoriesMedia = new ArrayCollection();
+        $this->medias = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -66,25 +64,25 @@ class Category
     /**
      * @return Collection<int, Media>
      */
-    public function getCategoriesMedia(): Collection
+    public function getMedias(): Collection
     {
-        return $this->categoriesMedia;
+        return $this->medias;
     }
 
-    public function addCategoriesMedium(Media $categoriesMedium): static
+    public function addMedia(Media $media): static
     {
-        if (!$this->categoriesMedia->contains($categoriesMedium)) {
-            $this->categoriesMedia->add($categoriesMedium);
-            $categoriesMedium->addCategoriesMedium($this);
+        if (!$this->medias->contains($media)) {
+            $this->medias->add($media);
+            $media->addCategory($this);
         }
 
         return $this;
     }
 
-    public function removeCategoriesMedium(Media $categoriesMedium): static
+    public function removeMedia(Media $media): static
     {
-        if ($this->categoriesMedia->removeElement($categoriesMedium)) {
-            $categoriesMedium->removeCategoriesMedium($this);
+        if ($this->medias->removeElement($media)) {
+            $media->removeCategory($this);
         }
 
         return $this;

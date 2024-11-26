@@ -1,12 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Entity;
 
 use App\Repository\SubscriptionHistoryRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SubscriptionHistoryRepository::class)]
@@ -27,7 +23,7 @@ class SubscriptionHistory
     #[ORM\JoinColumn(nullable: false)]
     private ?User $subscriber = null;
 
-    #[ORM\ManyToOne(inversedBy: 'subscriptionHistory')]
+    #[ORM\ManyToOne(inversedBy: 'subscriptionHistories')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Subscription $subscription = null;
 
@@ -71,8 +67,6 @@ class SubscriptionHistory
 
         return $this;
     }
-
-
 
     public function getSubscription(): ?Subscription
     {

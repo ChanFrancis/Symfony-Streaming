@@ -23,7 +23,8 @@ class Comment
     #[ORM\Column(enumType: CommentStatusEnum::class)]
     private ?CommentStatusEnum $status = null;
 
-    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'childComments')]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'childComments', cascade: ['remove'])]
+    #[ORM\JoinColumn(onDelete: "CASCADE")]
     private ?self $parentComment = null;
 
     /**

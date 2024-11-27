@@ -14,3 +14,6 @@ App\Entity\Language:
   de:
     nom: 'Allemand'
     code: 'DE'
+  ch:
+    nom: 'Chinois'
+    code: 'CH'

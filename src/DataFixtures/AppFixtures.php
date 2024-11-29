@@ -22,6 +22,7 @@ use DateTime;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
@@ -128,7 +129,20 @@ class AppFixtures extends Fixture
             $user->setUsername(username: "test_$i");
             $user->setPassword(password: 'coucou');
             $user->setAccountStatus(accountStatus: UserAccountStatusEnum::ACTIVE);
-            $user->setRoles(['ROLE_WORKER']);
+            
+            if ($i === 0) {
+                $user->setRoles(['ADMIN']);
+            }
+            elseif ($i < 3){  
+                $user->setRoles(['ROLE_WORKER']);
+            }
+            elseif ($i < (self::MAX_USERS - 1)){
+                $user->setRoles(['ROLE_USER']);
+            }
+            else {
+                $user->setRoles(['ROLE_BANNED']);
+            }
+
             $users[] = $user;
 
             $manager->persist(object: $user);

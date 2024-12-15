@@ -4,18 +4,29 @@ declare(strict_types=1);
 
 namespace App\Controller\Auth;
 
+use App\Entity\User;
+use App\Service\AuthCheckService as ServiceAuthCheckService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class AuthController extends AbstractController
 {
     #[Route(path: '/login', name: 'page_login')]
-    public function login(): Response
+    public function login(AuthenticationUtils $authenticationUtils): Response
     {
-          return $this->render(view: 'auth/login.html.twig');
+        $error = $authenticationUtils->getLastAuthenticationError();
+        $lastUsername = $authenticationUtils->getLastUsername();
+
+        return $this->render(view: 'auth/login.html.twig');
+        return $this->render('auth/login.html.twig', [
+            'last_username' => $lastUsername,
+            'error' => $error,
+        ]);
     }
 
     #[Route(path: '/register', name: 'page_register')]
@@ -42,20 +53,24 @@ class AuthController extends AbstractController
         return $this->render(view: 'auth/confirm.html.twig');
     }
 
+
+    public function __construct(private ServiceAuthCheckService $authCheckService) {
+
+    }
+
+
     public function registration(UserPasswordHasherInterface $passwordHasher): Response
     {
-        // ... e.g. get the user data from a registration form
         $user = new User('something');
         $plaintextPassword = "myExtraSecrurePassword";
 
-        // hash the password (based on the security.yaml config for the $user class)
         $hashedPassword = $passwordHasher->hashPassword(
             $user,
             $plaintextPassword
         );
         $user->setPassword($hashedPassword);
 
-        // ...
+        return new Response('Successful authentication.');
     }
 
     public function delete(UserPasswordHasherInterface $passwordHasher, UserInterface $user): void
@@ -66,5 +81,17 @@ class AuthController extends AbstractController
         if (!$passwordHasher->isPasswordValid($user, $plaintextPassword)) {
             throw new AccessDeniedHttpException();
         }
+    }
+
+    public function index(): Response
+    {
+        $this->authCheckService->someMethod();
+
+        if ($this->authCheckService->isUserAuthenticated()) {
+            $roles = $this->authCheckService->getCurrentUserRoles();
+            return new Response('User is authenticated with roles: ' . implode(', ', $roles));
+        }
+
+        return new Response('User is not authenticated.');
     }
 }

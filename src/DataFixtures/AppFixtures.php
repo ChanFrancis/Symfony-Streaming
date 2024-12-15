@@ -40,6 +40,13 @@ class AppFixtures extends Fixture
     public const MAX_COMMENTS_PER_MEDIA = 10;
     public const MAX_PLAYLIST_SUBSCRIPTION_PER_USERS = 3;
 
+    private UserPasswordHasherInterface $passwordHasher;
+
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
+    {
+        $this->passwordHasher = $passwordHasher;
+    }
+
     public function load(ObjectManager $manager): void
     {
         $users = [];
@@ -49,7 +56,7 @@ class AppFixtures extends Fixture
         $languages = [];
         $subscriptions = [];
 
-        $this->createUsers(manager: $manager, users: $users);
+        $this->createUsers(manager: $manager, users: $users, passwordHasher: $this->passwordHasher);
         $this->createPlaylists(manager: $manager, users: $users, playlists: $playlists);
         $this->createSubscriptions(manager: $manager, users: $users, subscriptions: $subscriptions);
         $this->createCategories(manager: $manager, categories: $categories);
@@ -121,33 +128,37 @@ class AppFixtures extends Fixture
         }
     }
 
-    protected function createUsers(ObjectManager $manager, array &$users): void
-    {
-        for ($i = 0; $i < self::MAX_USERS; $i++) {
-            $user = new User();
-            $user->setEmail(email: "test_$i@example.com");
-            $user->setUsername(username: "test_$i");
-            $user->setPassword(password: 'coucou');
-            $user->setAccountStatus(accountStatus: UserAccountStatusEnum::ACTIVE);
-            
-            if ($i === 0) {
-                $user->setRoles(['ADMIN']);
-            }
-            elseif ($i < 3){  
-                $user->setRoles(['ROLE_WORKER']);
-            }
-            elseif ($i < (self::MAX_USERS - 1)){
-                $user->setRoles(['ROLE_USER']);
-            }
-            else {
-                $user->setRoles(['ROLE_BANNED']);
-            }
+        protected function createUsers(ObjectManager $manager,  UserPasswordHasherInterface $passwordHasher,  array &$users): void
+        {
+            for ($i = 0; $i < self::MAX_USERS; $i++) {
+                $user = new User();
+                $user->setEmail(email: "test_$i@example.com");
+                $user->setUsername(username: "test_$i");
+                $hashedPassword = $passwordHasher->hashPassword(
+                    $user,
+                    'hello'
+                );
+                $user->setPassword(password: $hashedPassword);
+                $user->setAccountStatus(accountStatus: UserAccountStatusEnum::ACTIVE);
+                
+                if ($i === 0) {
+                    $user->setRoles(['ADMIN']);
+                }
+                elseif ($i < 3){  
+                    $user->setRoles(['ROLE_WORKER']);
+                }
+                elseif ($i < (self::MAX_USERS - 1)){
+                    $user->setRoles(['ROLE_USER']);
+                }
+                else {
+                    $user->setRoles(['ROLE_BANNED']);
+                }
 
-            $users[] = $user;
+                $users[] = $user;
 
-            $manager->persist(object: $user);
+                $manager->persist(object: $user);
+            }
         }
-    }
 
     public function createPlaylists(ObjectManager $manager, array $users, array &$playlists): void
     {

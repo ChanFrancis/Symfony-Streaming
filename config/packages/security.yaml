@@ -15,8 +15,16 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            access_token:
+                token_handler: App\Security\AccessTokenHandler
+
             lazy: true
             provider: users_in_memory
+
+            entry_point: form_login
+
+            json_login:
+                check_path: api_login
 
             form_login:
                 login_path: app_login
@@ -26,6 +34,9 @@ security:
                 path: app_logout
                 # where to redirect after logout
                 # target: app_any_route
+            
+            http_basic:
+                realm: Secured Area
     role_hierarchy:
         ROLE_SUPER_ADMIN : ROLE_ADMIN
         ROLE_ADMIN: ROLE_WORKER

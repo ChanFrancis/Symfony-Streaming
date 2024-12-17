@@ -1,7 +1,12 @@
 <aside class=" w-1/5 py-10 px-10  min-w-min  border-l border-gray-300 hidden lg:block ">
-    <div class="relative items-center content-center flex mb-6"">
+    <div class="relative items-center content-center flex mb-6">
         {% if app.user %}
             Bonjour {{ app.user.username }}
+        {% endif %}
+    </div>
+    <div class="relative items-center content-center flex mb-6">
+        {% if app.user and app.user.roles[0] == "ADMIN" %}
+            <a href="{{ path('app_category_new') }}"> ajouter une catégorie </a>
         {% endif %}
     </div>
     <div class="relative items-center content-center flex">

@@ -33,7 +33,7 @@
                 Votre abonnement actuel :
                 {% if app.user and app.user.currentSubscription %} 
 
-                    {{ dump(app) }}
+                    {{ app.user.currentSubscription.getName() }}
                 {% else %}
                 <span class="text-red-600 font-bold ml-2">Aucun</span>
                 {% endif %}

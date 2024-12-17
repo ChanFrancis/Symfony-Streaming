@@ -13,6 +13,9 @@ class ListController extends AbstractController
     #[Route('/lists', name: 'page_lists')]
     public function index(): Response
     {
+        if (!$this->getUser()) {
+            return $this->render('index.html.twig'); 
+        }
         return $this->render('movie/lists.html.twig');
     }
 }

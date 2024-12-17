@@ -24,7 +24,7 @@ security:
             pattern: ^/
             lazy: true
             provider: users_in_database
-            custom_authenticator: App\Security\APIAuthenticator
+            # custom_authenticator: App\Security\AccessHandler
             form_login:
                 login_path: app_login
                 check_path: app_login

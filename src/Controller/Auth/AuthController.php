@@ -14,6 +14,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class AuthController extends AbstractController
@@ -28,8 +29,8 @@ class AuthController extends AbstractController
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        if ($this->security->getUser()) {
-            if ($this->security->isGranted('ROLE_USER')) {
+        if ($this->getUser()) {
+            if ($this->isGranted('ROLE_USER')) {
                 return $this->redirectToRoute('homepage');
             }
 
@@ -89,7 +90,7 @@ class AuthController extends AbstractController
         return new Response('Successful authentication.');
     }
 
-    public function delete(UserPasswordHasherInterface $passwordHasher, UserInterface $user): void
+    public function delete(UserPasswordHasherInterface $passwordHasher, PasswordAuthenticatedUserInterface $user): void
     {
         // ... e.g. get the password from a "confirm deletion" dialog
         $plaintextPassword = "myExtraSecrurePassword";

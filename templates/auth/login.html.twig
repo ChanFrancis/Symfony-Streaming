@@ -55,23 +55,23 @@
                                     <svg class="h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>eye</title><path d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z" /></svg>
                                 </button>
                         </div> #}
-                        <form class="mt-10" action="{{ path('app_login') }}" method="post">
-                            {% if error %}
-                                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                            {% endif %}
-
-                            {% if app.user %}
+                        {% if error %}
+                            <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                        {% endif %}
+                        {% if app.user %}
+                        {{ dump('stop') }}
                                 <div class="mb-3">
                                     You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
                                 </div>
-                            {% endif %}
-                        
-                             <label for="username">Username</label>
-                            <input type="text" name="_username" id="username" class="form-control" autocomplete="username" required autofocus>
+                        {% endif %}
+                        <form action="{{ path('app_login') }}" method="post" class="mt-10" >
+                            <label for="username">Username</label>
+                            <input type="text" name="_username" id="username" class="form-control" autocomplete="username" value="{{ last_username }}" required autofocus>
                             
                             <label for="password">Password</label>
                             <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
-
+                            
+                            <input type="hidden" name="_target_path" value="/">
                             <input type="hidden" name="_csrf_token"
                                 value="{{ csrf_token('authenticate') }}"
                             >

@@ -7,28 +7,50 @@ namespace App\Controller\Auth;
 use App\Entity\User;
 use App\Service\AuthCheckService as ServiceAuthCheckService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class AuthController extends AbstractController
 {
-    #[Route(path: '/login', name: 'page_login')]
+    private Security $security;
+
+    public function __construct(Security $security, private ServiceAuthCheckService $authCheckService)
+    {
+        $this->security = $security;
+    }
+
+    #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
+        if ($this->security->getUser()) {
+            if ($this->security->isGranted('ROLE_USER')) {
+                return $this->redirectToRoute('homepage');
+            }
+
+            throw new AccessDeniedException('Access denied. You do not have the required role.');
+        }
+
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
-
-        return $this->render(view: 'auth/login.html.twig');
+        
         return $this->render('auth/login.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,
         ]);
     }
 
+    #[Route(path: '/logout', name: 'app_logout')]
+    public function logout(): void
+    {
+        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+    }
+    
     #[Route(path: '/register', name: 'page_register')]
     public function register(): Response
     {
@@ -52,12 +74,6 @@ class AuthController extends AbstractController
     {
         return $this->render(view: 'auth/confirm.html.twig');
     }
-
-
-    public function __construct(private ServiceAuthCheckService $authCheckService) {
-
-    }
-
 
     public function registration(UserPasswordHasherInterface $passwordHasher): Response
     {

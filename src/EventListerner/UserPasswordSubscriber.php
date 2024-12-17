@@ -18,6 +18,11 @@ readOnly class UserPasswordSubscriber
         
     }
 
+    public function prePersist(User $user): void
+    {
+        $this->encodePassword($user);
+    }
+
     public function preUpdate(User $user): void
     {
         $this->encodePassword($user);
@@ -32,7 +37,7 @@ readOnly class UserPasswordSubscriber
         }
 
         $encodedPassword = $this->passwordHasher->hashPassword($user, $plainPassword);
-
-        $this->encodePassword($user);
+        $user->setPassword($encodedPassword);
+        $user->eraseCredentials();
     }
 }

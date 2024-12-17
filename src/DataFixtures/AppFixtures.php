@@ -134,11 +134,7 @@ class AppFixtures extends Fixture
                 $user = new User();
                 $user->setEmail(email: "test_$i@example.com");
                 $user->setUsername(username: "test_$i");
-                $hashedPassword = $passwordHasher->hashPassword(
-                    $user,
-                    'hello'
-                );
-                $user->setPassword(password: $hashedPassword);
+                $user->setPlainPassword(plainPassword: 'hello');;
                 $user->setAccountStatus(accountStatus: UserAccountStatusEnum::ACTIVE);
                 
                 if ($i === 0) {

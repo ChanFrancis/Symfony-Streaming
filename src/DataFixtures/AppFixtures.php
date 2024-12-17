@@ -142,7 +142,7 @@ class AppFixtures extends Fixture
                 $user->setAccountStatus(accountStatus: UserAccountStatusEnum::ACTIVE);
                 
                 if ($i === 0) {
-                    $user->setRoles(['ADMIN']);
+                    $user->setRoles(['ROLE_ADMIN']);
                 }
                 elseif ($i < 3){  
                     $user->setRoles(['ROLE_WORKER']);

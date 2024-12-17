@@ -8,6 +8,9 @@ services:
       MYSQL_DATABASE: streemi
       MYSQL_PASSWORD: root
 
+    mailhog:
+    
+
   rabbitmq:
     image: rabbitmq:3-management
     ports:

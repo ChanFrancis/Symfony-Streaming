@@ -24,7 +24,6 @@ security:
             pattern: ^/
             lazy: true
             provider: users_in_database
-            # custom_authenticator: App\Security\AccessHandler
             form_login:
                 login_path: app_login
                 check_path: app_login
@@ -32,6 +31,8 @@ security:
                 csrf_token_id: authenticate
             logout:
                 path: app_logout
+                target: app_login
+                enable_csrf: true
 
         api:
             pattern: ^/api/

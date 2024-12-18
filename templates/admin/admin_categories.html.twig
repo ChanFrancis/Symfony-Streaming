@@ -28,13 +28,13 @@
         <section>
             <h1 class="text-lg font-medium text-black mb-9">Administration
                 <span class="font-bold text-red-600">des catégories</span></h1>
-            <button class="flex flex-col items-center mt-9 w-full">
+            <a href="{{ path('app_category_new') }}" class="flex flex-col items-center mt-9 w-full">
                 <div class="relative flex w-full bg-red-600 flex-row p-3 items-center justify-center rounded-lg overflow-hidden border cursor-pointer transition hover:bg-red-700 text-white">
                     <span class="font-bold mr-2">
                         <svg class="h-6 w-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>plus-circle</title><path d="M17,13H13V17H11V13H7V11H11V7H13V11H17M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/></svg>
                     </span> <span class="capitalize font-medium text-md">Ajouter un catégorie</span>
                 </div>
-            </button>
+            </a>
         </section>
         <section class="mt-9">
 
@@ -66,6 +66,7 @@
                                     <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> ID</th>
                                     <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize min-w-[350px]"> Catégorie</th>
                                     <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Label</th>
+                                    <th scope="col" class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"> Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-300 ">
@@ -84,329 +85,23 @@
                                         </div>
                                     </td>
                                     <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> {{ category.label }}</td>
+                                    <td class="flex p-5 items-center gap-0.5">
+                                        <a href="{{ path('app_category_edit', { id: category.id }) }}" class="p-2 rounded-lg transition text-orange-400 flex item-center hover:bg-black/10">
+                                            <svg class="h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                <title>pencil</title>
+                                                <path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"/>
+                                            </svg>
+                                        </a>
+                                        <a href="{{ path('app_category_delete', { id: category.id }) }}" class="p-2  rounded-lg transition text-red-600 flex item-center hover:bg-black/10">
+                                            <svg class="h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                <title>delete</title>
+                                                <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
+                                            </svg>
+                                        </a>
+                                    </td>
                                     
                                 </tr>
                                 {% endfor %}
-                                {# <tr class="bg-white transition-all duration-500 hover:bg-gray-50">
-                                    <td class="">
-                                        <div class="flex items-center py-5 px-5 ">
-                                            <input type="checkbox" value="" class="w-5 h-5 appearance-none border border-gray-300  rounded-md mr-2 hover:border-indigo-500 hover:bg-indigo-100 checked:bg-no-repeat checked:bg-center checked:border-indigo-500 checked:bg-indigo-100">
-                                        </div>
-                                    </td>
-                                    <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> 20010511</td>
-                                    <td class="w-48 px-5 py-3">
-                                        <div class="flex items-center gap-3">
-                                            <img src="https://pagedone.io/asset/uploads/1697536435.png" alt="Savannah image">
-                                            <div class="data">
-                                                <p class="font-normal text-sm text-gray-900">Savannah Nguyen</p>
-                                                <p class="font-normal text-xs leading-5 text-gray-400"> savannahng@pagedone.io </p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> Feb. 23, 2023</td>
-                                    <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
-                                        <div class="py-1.5 px-2.5 bg-red-50 rounded-full flex w-20 justify-center items-center gap-1">
-                                            <svg width="5" height="6" viewBox="0 0 5 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <circle cx="2.5" cy="3" r="2.5" fill="#DC2626"></circle>
-                                            </svg>
-                                            <span class="font-medium text-xs text-red-600 ">Bloqué</span>
-                                        </div>
-                                    </td>
-                                    <td class="flex p-5 items-center gap-0.5">
-                                        <button class="p-2 rounded-lg transition text-orange-400 flex item-center hover:bg-black/10">
-                                            <svg class="h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                                <title>pencil</title>
-                                                <path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"/>
-                                            </svg>
-                                        </button>
-                                        <button class="p-2  rounded-lg transition text-red-600 flex item-center hover:bg-black/10">
-                                            <svg class="h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                                <title>delete</title>
-                                                <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
-                                            </svg>
-                                        </button>
-                                    </td>
-                                </tr>/ #}
-                                {# <tr class="bg-white transition-all duration-500 hover:bg-gray-50">
-                                    <td class="">
-                                        <div class="flex items-center py-5 px-5 ">
-                                            <input type="checkbox" value="" class="w-5 h-5 appearance-none border border-gray-300  rounded-md mr-2 hover:border-indigo-500 hover:bg-indigo-100 checked:bg-no-repeat checked:bg-center checked:border-indigo-500 checked:bg-indigo-100">
-                                        </div>
-                                    </td>
-                                    <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> 20010512</td>
-                                    <td class="w-48 px-5 py-3 whitespace-nowrap">
-                                        <div class="flex items-center gap-3">
-                                            <img src="https://pagedone.io/asset/uploads/1697536451.png" alt="Cameron image">
-                                            <div class="data min-w-[150px]">
-                                                <p class="font-normal text-sm text-gray-900 whitespace-nowrap">Cameron Williamson</p>
-                                                <p class="font-normal text-xs leading-5 text-gray-400 whitespace-nowrap"> cameron@pagedone.io </p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> Oct. 23, 2023</td>
-                                    <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
-                                        <div class="py-1.5 px-2.5 bg-amber-50 rounded-full flex items-center justify-center w-20 gap-1">
-                                            <svg width="5" height="6" viewBox="0 0 5 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <circle cx="2.5" cy="3" r="2.5" fill="#D97706"></circle>
-                                            </svg>
-                                            <span class="font-medium text-xs text-amber-600 ">Attente</span>
-                                        </div>
-                                    </td>
-                                    <td class="flex p-5 items-center gap-0.5">
-                                        <button class="p-2 rounded-lg transition text-orange-400 flex item-center hover:bg-black/10">
-                                            <svg class="h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                                <title>pencil</title>
-                                                <path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"/>
-                                            </svg>
-                                        </button>
-                                        <button class="p-2  rounded-lg transition text-red-600 flex item-center hover:bg-black/10">
-                                            <svg class="h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                                <title>delete</title>
-                                                <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
-                                            </svg>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr class="bg-white transition-all duration-500 hover:bg-gray-50">
-                                    <td class="">
-                                        <div class="flex items-center py-5 px-5 ">
-                                            <input type="checkbox" value="" class="w-5 h-5 appearance-none border border-gray-300  rounded-md mr-2 hover:border-indigo-500 hover:bg-indigo-100 checked:bg-no-repeat checked:bg-center checked:border-indigo-500 checked:bg-indigo-100">
-                                        </div>
-                                    </td>
-                                    <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> 20010513</td>
-                                    <td class="w-48 px-5 py-3">
-                                        <div class="flex items-center gap-3">
-                                            <img src="https://pagedone.io/asset/uploads/1697536466.png" alt="Darrell image">
-                                            <div class="data">
-                                                <p class="font-normal text-sm text-gray-900">Darrell Steward</p>
-                                                <p class="font-normal text-xs leading-5 text-gray-400"> darrellstew@pagedone.io </p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> Jul. 12, 2023</td>
-                                    <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
-                                        <div class="py-1.5 px-2.5 bg-red-50 rounded-full flex items-center w-20 justify-center gap-1">
-                                            <svg width="5" height="6" viewBox="0 0 5 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <circle cx="2.5" cy="3" r="2.5" fill="#DC2626"></circle>
-                                            </svg>
-                                            <span class="font-medium text-xs text-red-600 ">Bloqué</span>
-                                        </div>
-                                    </td>
-                                    <td class="flex p-5 items-center gap-0.5">
-                                        <button class="p-2 rounded-lg transition text-orange-400 flex item-center hover:bg-black/10">
-                                            <svg class="h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                                <title>pencil</title>
-                                                <path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"/>
-                                            </svg>
-                                        </button>
-                                        <button class="p-2  rounded-lg transition text-red-600 flex item-center hover:bg-black/10">
-                                            <svg class="h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                                <title>delete</title>
-                                                <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
-                                            </svg>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr class="bg-white transition-all duration-500 hover:bg-gray-50">
-                                    <td class="">
-                                        <div class="flex items-center py-5 px-5 ">
-                                            <input type="checkbox" value="" class="w-5 h-5 appearance-none border border-gray-300  rounded-md mr-2 hover:border-indigo-500 hover:bg-indigo-100 checked:bg-no-repeat checked:bg-center checked:border-indigo-500 checked:bg-indigo-100">
-                                        </div>
-                                    </td>
-                                    <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> 20010514</td>
-                                    <td class="w-48 px-5 py-3">
-                                        <div class="flex items-center gap-3">
-                                            <img src="https://pagedone.io/asset/uploads/1697536479.png" alt="Laura image">
-                                            <div class="data">
-                                                <p class="font-normal text-sm text-gray-900">Laura Bran</p>
-                                                <p class="font-normal text-xs leading-5 text-gray-400"> laurabran@pagedone.io </p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> Sep. 29, 2023</td>
-                                    <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
-                                        <div class="py-1.5 px-2.5 bg-emerald-50 rounded-full flex justify-center w-20 items-center gap-1">
-                                            <svg width="5" height="6" viewBox="0 0 5 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <circle cx="2.5" cy="3" r="2.5" fill="#059669"></circle>
-                                            </svg>
-                                            <span class="font-medium text-xs text-emerald-600 ">Actif</span>
-                                        </div>
-                                    </td>
-                                    <td class="flex p-5 items-center gap-0.5">
-                                        <button class="p-2 rounded-lg transition text-orange-400 flex item-center hover:bg-black/10">
-                                            <svg class="h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                                <title>pencil</title>
-                                                <path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"/>
-                                            </svg>
-                                        </button>
-                                        <button class="p-2  rounded-lg transition text-red-600 flex item-center hover:bg-black/10">
-                                            <svg class="h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                                <title>delete</title>
-                                                <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
-                                            </svg>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr class="bg-white transition-all duration-500 hover:bg-gray-50">
-                                    <td class="">
-                                        <div class="flex items-center py-5 px-5 ">
-                                            <input type="checkbox" value="" class="w-5 h-5 appearance-none border border-gray-300  rounded-md mr-2 hover:border-indigo-500 hover:bg-indigo-100 checked:bg-no-repeat checked:bg-center checked:border-indigo-500 checked:bg-indigo-100">
-                                        </div>
-                                    </td>
-                                    <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> 20010515</td>
-                                    <td class="w-48 px-5 py-3">
-                                        <div class="flex items-center gap-3">
-                                            <img src="https://pagedone.io/asset/uploads/1697536494.png" alt="Alfred image">
-                                            <div class="data">
-                                                <p class="font-normal text-sm text-gray-900">Alfred Frook</p>
-                                                <p class="font-normal text-xs leading-5 text-gray-400"> alfredfrook@pagedone.io</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> Dec. 02, 2023</td>
-                                    <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
-                                        <div class="py-1.5 px-2.5 bg-emerald-50 rounded-full flex justify-center w-20 items-center gap-1">
-                                            <svg width="5" height="6" viewBox="0 0 5 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <circle cx="2.5" cy="3" r="2.5" fill="#059669"></circle>
-                                            </svg>
-                                            <span class="font-medium text-xs text-emerald-600 ">Actif</span>
-                                        </div>
-                                    </td>
-                                    <td class="flex p-5 items-center gap-0.5">
-                                        <button class="p-2 rounded-lg transition text-orange-400 flex item-center hover:bg-black/10">
-                                            <svg class="h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                                <title>pencil</title>
-                                                <path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"/>
-                                            </svg>
-                                        </button>
-                                        <button class="p-2  rounded-lg transition text-red-600 flex item-center hover:bg-black/10">
-                                            <svg class="h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                                <title>delete</title>
-                                                <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
-                                            </svg>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr class="bg-white transition-all duration-500 hover:bg-gray-50">
-                                    <td class="">
-                                        <div class="flex items-center py-5 px-5 ">
-                                            <input type="checkbox" value="" class="w-5 h-5 appearance-none border border-gray-300  rounded-md mr-2 hover:border-indigo-500 hover:bg-indigo-100 checked:bg-no-repeat checked:bg-center checked:border-indigo-500 checked:bg-indigo-100">
-                                        </div>
-                                    </td>
-                                    <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> 20010516</td>
-                                    <td class="w-48 px-5 py-3 whitespace-nowrap">
-                                        <div class="flex items-center gap-3">
-                                            <img src="https://pagedone.io/asset/uploads/1697536512.png" alt="Claire image">
-                                            <div class="data min-w-[150px]">
-                                                <p class="font-normal text-sm text-gray-900 whitespace-nowrap">Claire Tran </p>
-                                                <p class="font-normal text-xs leading-5 text-gray-400 whitespace-nowrap"> clairetran@pagedone.io </p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> Jan. 09, 2023</td>
-                                    <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
-                                        <div class="py-1.5 px-2.5 bg-amber-50 rounded-full flex items-center justify-center w-20 gap-1">
-                                            <svg width="5" height="6" viewBox="0 0 5 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <circle cx="2.5" cy="3" r="2.5" fill="#D97706"></circle>
-                                            </svg>
-                                            <span class="font-medium text-xs text-amber-600 ">Attente</span>
-                                        </div>
-                                    </td>
-                                    <td class="flex p-5 items-center gap-0.5">
-                                        <button class="p-2 rounded-lg transition text-orange-400 flex item-center hover:bg-black/10">
-                                            <svg class="h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                                <title>pencil</title>
-                                                <path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"/>
-                                            </svg>
-                                        </button>
-                                        <button class="p-2  rounded-lg transition text-red-600 flex item-center hover:bg-black/10">
-                                            <svg class="h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                                <title>delete</title>
-                                                <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
-                                            </svg>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr class="bg-white transition-all duration-500 hover:bg-gray-50">
-                                    <td class="">
-                                        <div class="flex items-center py-5 px-5 ">
-                                            <input type="checkbox" value="" class="w-5 h-5 appearance-none border border-gray-300  rounded-md mr-2 hover:border-indigo-500 hover:bg-indigo-100 checked:bg-no-repeat checked:bg-center checked:border-indigo-500 checked:bg-indigo-100">
-                                        </div>
-                                    </td>
-                                    <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> 20010517</td>
-                                    <td class="w-48 px-5 py-3">
-                                        <div class="flex items-center gap-3">
-                                            <img src="https://pagedone.io/asset/uploads/1697536525.png" alt="Sam image">
-                                            <div class="data">
-                                                <p class="font-normal text-sm text-gray-900">Sam John</p>
-                                                <p class="font-normal text-xs leading-5 text-gray-400"> samjohn@pagedone.io </p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> Mar. 15, 2023</td>
-                                    <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
-                                        <div class="py-1.5 px-2.5 bg-red-50 rounded-full flex w-20 justify-center items-center gap-1">
-                                            <svg width="5" height="6" viewBox="0 0 5 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <circle cx="2.5" cy="3" r="2.5" fill="#DC2626"></circle>
-                                            </svg>
-                                            <span class="font-medium text-xs text-red-600 ">Bloqué</span>
-                                        </div>
-                                    </td>
-                                    <td class="flex p-5 items-center gap-0.5">
-                                        <button class="p-2 rounded-lg transition text-orange-400 flex item-center hover:bg-black/10">
-                                            <svg class="h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                                <title>pencil</title>
-                                                <path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"/>
-                                            </svg>
-                                        </button>
-                                        <button class="p-2  rounded-lg transition text-red-600 flex item-center hover:bg-black/10">
-                                            <svg class="h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                                <title>delete</title>
-                                                <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
-                                            </svg>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr class="bg-white transition-all duration-500 hover:bg-gray-50">
-                                    <td class="">
-                                        <div class="flex items-center py-5 px-5 ">
-                                            <input type="checkbox" value="" class="w-5 h-5 appearance-none border border-gray-300  rounded-md mr-2 hover:border-indigo-500 hover:bg-indigo-100 checked:bg-no-repeat checked:bg-center checked:border-indigo-500 checked:bg-indigo-100">
-                                        </div>
-                                    </td>
-                                    <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> 20010518</td>
-                                    <td class="w-48 px-5 py-3 whitespace-nowrap">
-                                        <div class="flex items-center gap-3">
-                                            <img src="https://pagedone.io/asset/uploads/1697536552.png" alt="Richard image">
-                                            <div class="data min-w-[150px]">
-                                                <p class="font-normal text-sm text-gray-900 whitespace-nowrap">Richard Riccio </p>
-                                                <p class="font-normal text-xs leading-5 text-gray-400 whitespace-nowrap"> richardriccio@pagedone.io </p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> Apr. 02, 2023</td>
-                                    <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
-                                        <div class="py-1.5 px-2.5 bg-amber-50 rounded-full flex items-center justify-center w-20 gap-1">
-                                            <svg width="5" height="6" viewBox="0 0 5 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <circle cx="2.5" cy="3" r="2.5" fill="#D97706"></circle>
-                                            </svg>
-                                            <span class="font-medium text-xs text-amber-600 ">Attente</span>
-                                        </div>
-                                    </td>
-                                    <td class="flex p-5 items-center gap-0.5">
-                                        <button class="p-2 rounded-lg transition text-orange-400 flex item-center hover:bg-black/10">
-                                            <svg class="h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                                <title>pencil</title>
-                                                <path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"/>
-                                            </svg>
-                                        </button>
-                                        <button class="p-2  rounded-lg transition text-red-600 flex item-center hover:bg-black/10">
-                                            <svg class="h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                                <title>delete</title>
-                                                <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
-                                            </svg>
-                                        </button>
-                                    </td>
-                                </tr> #}
                                 </tbody>
                             </table>
                         </div>

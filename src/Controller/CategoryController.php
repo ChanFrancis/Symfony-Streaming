@@ -50,6 +50,12 @@ final class CategoryController extends AbstractController
         ]);
     }
 
+    // #[Route('/{id}', name: 'app_category_to_edit', methods: ['GET'])]
+    // public function toEdit(Category $category): Response
+    // {
+    //     return $this->render('category/edit.html.twig');
+    // }
+
     #[Route('/{id}/edit', name: 'app_category_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Category $category, EntityManagerInterface $entityManager): Response
     {
